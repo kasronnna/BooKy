@@ -383,11 +383,13 @@ def Menu_printer(opts,title = "", shape = "=", space_line = True, head_steps = 0
             lop = False
             return False
          
-        elif key == key.down and realtime_position != len(opts.values()) : 
+        elif key == key.down : # and realtime_position != len(opts.values()) :
             realtime_position += 1
+            if realtime_position == len(opts.values()) + 1 : realtime_position = 1
 
-        elif key == key.up and realtime_position !=1 : 
+        elif key == key.up  :#and realtime_position !=1 : 
             realtime_position -= 1
+            if realtime_position == 0 : realtime_position = len(opts.values()) 
 
         elif key == key.enter : 
             lop = False
@@ -417,8 +419,10 @@ def Menu_printer(opts,title = "", shape = "=", space_line = True, head_steps = 0
         for v in opts.values() :
             if value == realtime_position  : realtime_value = v; break
             else : value+=1  
-        print(f"[> {realtime_value} <]")
+        print(f"[> {realtime_value}  {realtime_position}<]")
+        
         zz(0.016)
+
         if free_flicker[::-1] != realtime_position :
             call("clear")
             free_flicker.append(realtime_position)
