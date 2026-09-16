@@ -417,7 +417,7 @@ def Menu_printer(opts,title = "", shape = "=", space_line = True, head_steps = 0
         for v in opts.values() :
             if value == realtime_position  : realtime_value = v; break
             else : value+=1  
-        print(f"=> {realtime_value} ")
+        print(f"[> {realtime_value} <]")
         zz(0.016)
         if free_flicker[::-1] != realtime_position :
             call("clear")
@@ -501,5 +501,5 @@ while Loop :
             call("clear")
             print("[DONE]")
             zz(0.1)
-            loop = False
+            Loop = False
 
