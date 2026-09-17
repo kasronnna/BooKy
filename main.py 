@@ -165,8 +165,8 @@ def sql_data_sorting_screen(datas, sorting_column, limit_row, limit_option):
         
         line += 1
         
-        if line == tall :continue
-        else : print("-" * head_line, end="\n")
+        if line != tall : print("-" * head_line, end="\n")
+        #else : print("-" * head_line, end="\n")
     
     print("=" * head_line, end="\n")
 
