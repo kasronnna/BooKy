@@ -93,7 +93,12 @@ def sql_table_controll( db_name,
                             return list(mouse.execute(
                             f'SELECT {column} FROM {table_name} {main_search_options[search_option]} {order_search_options[order]} {limite_search_options[limit_option]}'))
                         except :
-                            return ["THERE IS AN ERROR"]
+                            
+                            call("clear")
+                            print(f'SELECT {column} FROM {table_name} {main_search_options[search_option]} {order_search_options[order]} {limite_search_options[limit_option]}')
+                            print("[THERE IS AN ERROR]")
+                            zz(2)
+                            return ""
 
                 case 1 :    #INSERTING
                     try:
@@ -105,7 +110,7 @@ def sql_table_controll( db_name,
                         return False
                     finally : db.close()
                
-def sql_data_sorting_screen(datas, sorting_column, limit_row, limit_option):
+def sql_data_sorting_screen(datas, sorting_column, limit_row, limit_option, order):
     
     tall = line = head_line = 0
     
@@ -152,9 +157,12 @@ def sql_data_sorting_screen(datas, sorting_column, limit_row, limit_option):
                     pp = pp.replace(pp[pp.find(" ")], "")
                     pp = pp.replace(pp[10:len(pp)], "")
                     data[0] = pp.replace(pp[7:10], "...")
-
-        if sorting_column == 0 :print(f"{data[0]:7}|{data[1]:16}|{data[2]:16}|{data[3]:16}|{data[4]:7}|")
-        else : print(f"{data[0]:<16}|")
+        if order == 1 : 
+            print(order)
+            zz(2)
+            print(data)
+            if sorting_column == 0 :print(f"{data[0]:7}|{data[1]:16}|{data[2]:16}|{data[3]:16}|{data[4]:7}|")
+            else : print(f"{data[0]:<16}|")
         
         line += 1
         
@@ -215,7 +223,7 @@ def See_All_Books(db_name = "library.db", table_name = "Books") :
                                                 limit_row=limit_row,
                                                 limit_option=limit_option)
                     
-                    sql_data_sorting_screen(datas=datas, limit_row=limit_row, sorting_column=sorting_column, limit_option=limit_option)
+                    sql_data_sorting_screen(datas=datas, limit_row=limit_row, sorting_column=sorting_column, limit_option=limit_option, order=order)
                 case 2 :
                     """=========================== Referances ================================="""
 
@@ -253,10 +261,11 @@ def See_All_Books(db_name = "library.db", table_name = "Books") :
 
                             case 2:
                                 """ == REV == """
-                                order_cache = Menu_printer(opts=sorting_orders_option, title="SORTING REFERANCE", shape="_", head_steps= 6 *len(max(sorting_orders_option.values())))
-                                
-                                if order_cache == 3 : continue
-                                else : order = order_cache - 1
+                                order_cache = Menu_printer(opts=sorting_orders_option, title="SORTING REFERANCE", shape="_", head_steps= 6 *len(max(sorting_orders_option.values()))) - 1
+                                if order_cache == 2 : continue
+                                else : order = order_cache 
+                
+                                    
 
                             case 3:
                                 """ == LIM == """
