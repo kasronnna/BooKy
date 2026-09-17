@@ -91,7 +91,8 @@ def sql_table_controll( db_name,
         
             match task_type :
                 
-                case 0 :            # SELECTION
+                # SELECTION
+                case 0 :            
                         try :
                             gear = (0 if sorting_column == 0 else 1 )   
                             return list(mouse.execute(
@@ -102,7 +103,8 @@ def sql_table_controll( db_name,
                             call("clear")
                             return ""
 
-                case 1 :    #INSERTING
+                #INSERTING
+                case 1 :    
                     try:
                         mouse.execute(f'INSERT INTO {table_name} VALUES(?,?,?,?,?)', book_paramaters)
                         db.commit()
@@ -110,6 +112,12 @@ def sql_table_controll( db_name,
                         return True
                     except :
                         return False
+                    finally : db.close()
+                
+                # ID Selection for Id detection
+                case 2 : 
+                    try : return list(mouse.execute(f'SELECT id FROM {db_name}'))
+                    except : print("[ID SELECTION PROBLEM]"); zz(1); call("clear"); return ""
                     finally : db.close()
                
 def sql_data_sorting_screen(datas, sorting_column, limit_row, limit_option):
