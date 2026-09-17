@@ -290,13 +290,14 @@ def See_All_Books(db_name = "library.db", table_name = "Books") :
 def add_books(): 
     
     lop = True
+    
     book_paramaters = [
-                randint(0, 100000),
-                "NULL", #Name
-                "NULL", #Author
-                "NULL", #Niche
-                0       #Year
-            ]
+            randint(0, 100000),
+            "NULL", #Name
+            "NULL", #Author
+            "NULL", #Niche
+            0       #Year
+        ]
 
     
     
@@ -304,7 +305,7 @@ def add_books():
     
     #>Funcs 
     while lop :
-        
+            
         opts_add = {"1": f"Name     [> {book_paramaters[1]:10} <]",
                     "2": f"Author   [> {book_paramaters[2]:10} <]",
                     "3": f"Niche    [> {book_paramaters[3]:10} <]",
@@ -336,7 +337,14 @@ def add_books():
             except : print("[NUMBERS ONLY]"); zz(1)
 
         else :  
-            book_paramaters[pos] = input(f"Change {book_paramaters[pos]} to : ")
+            parameter = str(input(f"Change {book_paramaters[pos]} to : ")) 
+            
+            try :
+                if parameter.find(" ") != -1 : parameter = parameter.replace(parameter[parameter.find(" ")], "")
+                if parameter == "Null" : book_paramaters[pos] = "Null"
+                else : book_paramaters[pos] = parameter
+                    
+            except : book_paramaters[pos] = "Null"
 
 def Intro(Title, shape = "-", head_steps = 10, time_out = 1 ): 
     
@@ -409,6 +417,7 @@ def Menu_printer(opts,title = "", shape = "=", space_line = True, head_steps = 0
         
         print(title)
         print(shape * head_steps, end="\n")
+
         if space_line :
             for key, value in opts.items() :print(f"{key} -> {value}")
             print(shape * head_steps, end="\n")     
@@ -419,7 +428,7 @@ def Menu_printer(opts,title = "", shape = "=", space_line = True, head_steps = 0
         for v in opts.values() :
             if value == realtime_position  : realtime_value = v; break
             else : value+=1  
-        print(f"[> {realtime_value}  {realtime_position}<]")
+        print(f"[> {realtime_value} <]")
         
         zz(0.016)
 
