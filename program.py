@@ -116,7 +116,7 @@ def sql_table_controll( db_name,
                 
                 # ID Selection for Id detection
                 case 2 : 
-                    try : return list(mouse.execute(f'SELECT id FROM {db_name}'))
+                    try : return list(mouse.execute(f'SELECT id FROM {table_name}'))
                     except : print("[ID SELECTION PROBLEM]"); zz(1); call("clear"); return ""
                     finally : db.close()
                
@@ -179,6 +179,86 @@ def sql_data_sorting_screen(datas, sorting_column, limit_row, limit_option):
     print("=" * head_line, end="\n")
 
     input("Press ...")
+
+
+
+
+def search_book():
+    # The idea is to search with slecet : 
+    # searching with all Columns ; 
+    # using LIKE in Text, and Between in INTEGERS
+
+    # Vars 
+    search_options = {  "1":"Sort",
+                        "2":"Parameters",
+                        "3":"Quit"}
+    search_parameter_options = {"1":"Column",
+                                "2":"Specific",
+                                "3":"Direction",
+                                "4":"Limit",
+                                "5":"Quit"}
+    
+    search_columns = ''
+
+    state = ("[T]", "[F]")
+    table_columns = ('*','id', 'name', 'author', 'type', 'year')
+    
+    
+    
+    #Main 
+
+    while True : 
+                
+        match Menu_printer(search_options, title="searche menu", shape="-", head_steps=len(max(search_options.values(), key=len))*2): 
+            case 1 : # Sorting
+                
+                pass
+            case 2 : # Para
+                while True :
+                    match Menu_printer(search_parameter_options, title="parameters", shape="-", head_steps=len(max(search_parameter_options.values(), key=len))*2) :
+                        case 1 : #Columns
+                            
+                            while True :
+                                spp_columns={   "1":f"All     {state[0] if search_columns == table_columns[0] else state[1]}",
+                                "2":f"ID      {state[0] if table_columns[1] in search_columns else state[1]}",
+                                "3":f"Title   {state[0] if table_columns[2] in search_columns else state[1]}",
+                                "4":f"Author  {state[0] if table_columns[3] in search_columns else state[1]}",
+                                "5":f"Niche   {state[0] if table_columns[4] in search_columns else state[1]}",
+                                "6":f"Year    {state[0] if table_columns[5] in search_columns else state[1]}",
+                                "7":"Quit"}
+                                
+                                n = Menu_printer(spp_columns, title="parameters", shape="-", head_steps=len(max(spp_columns.values(), key=len))*2) - 1   
+                                if n == 6 : 
+                                    call("clear")
+                                    print("[DONE]")
+                                    zz(0.1)
+                                    break
+                                elif n == 0 :    
+                                    search_columns = table_columns[0]
+                                
+                                else : 
+                                    if table_columns[n] not in search_columns : search_columns += table_columns[n] + ","
+                                
+                                j = 0 
+                                for i in table_columns :
+                                    if i == '*' : continue 
+                                    elif i in search_columns : j+=1
+                                    if j == 5 : search_columns = '*'
+                        case 2 : #Specific
+                            
+                        case 3 :pass
+                        case 4 :pass
+                        case 5 :
+                            call("clear")
+                            print("[DONE]")
+                            zz(0.1)
+                            break
+            case 3 :
+                call("clear")
+                print("[DONE]")
+                zz(0.1)
+                break
+
 
 def See_All_Books(db_name = "library.db", table_name = "Books") :
     
@@ -306,13 +386,21 @@ def See_All_Books(db_name = "library.db", table_name = "Books") :
 def add_books(): 
     
     lop = True
+    name = author = niche = "NULL"
+    year = 0
     
+    id_book = randint(0,10000)
+
+    id_list= sql_table_controll(db_name="library.db", task_type=2)
+    
+    while id_book in id_list : id_book = randint(0,10000)
+
     book_paramaters = [
-            randint(0, 100000),
-            "NULL", #Name
-            "NULL", #Author
-            "NULL", #Niche
-            0       #Year
+            id_book,
+            name,
+            author,
+            niche,
+            year,
         ]
 
     
@@ -344,6 +432,7 @@ def add_books():
             try :
                 sql_table_controll(db_name="library.db", task_type=1, book_paramaters=book_paramaters) 
                 print("[SUBMITION SECCUSSED!]");zz(1)
+                lop = False
             except :
                 print("[SUBMITION Has probleme]"); zz(1)
         
@@ -389,8 +478,7 @@ def Intro(Title, shape = "-", head_steps = 10, time_out = 1 ):
 
         return True
  
-def Menu_printer(opts,title = "", shape = "=", space_line = True, head_steps = 0,
-                  data = [], data_sorting_permition= False, data_sorting_title = "Data") : 
+def Menu_printer(opts,title = "", shape = "=", space_line = True, head_steps = 0) : 
      
     realtime_value = ""
     lop = True
@@ -495,15 +583,12 @@ def View_library() :
         match Menu_printer(opts_lib,title="Library Menu", shape="_", head_steps= 2 * len(max(opts_lib.values(), key=len))) :
             case 1:
                 See_All_Books()
-                pass
             
             case 2:
-
-                pass
-            
+                search_book()
+                
             case 3:
                 add_books()
-                pass
             
             case 4:
             

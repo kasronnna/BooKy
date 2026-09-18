@@ -1,3 +1,7 @@
+#My files
+library.db
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
