@@ -203,32 +203,24 @@ def search_book():
     
     search_columns = ''
     search_specific = ''
-    *
+    
     search_as = ''  
     exact_searching_value = -1 
-    gap_searching_value = ( -1, -1)
+    gap_searching_value = [ -1, -1]
 
     state = ("[T]", "[F]")
     table_columns = ('*','id', 'name', 'author', 'type', 'year')
-    spp_columns={   "1":f"All     {state[0] if search_columns == table_columns[0] else state[1]}",
-                                "2":f"ID      {state[0] if table_columns[1] in search_columns else state[1]}",
-                                "3":f"Title   {state[0] if table_columns[2] in search_columns else state[1]}",
-                                "4":f"Author  {state[0] if table_columns[3] in search_columns else state[1]}",
-                                "5":f"Niche   {state[0] if table_columns[4] in search_columns else state[1]}",
-                                "6":f"Year    {state[0] if table_columns[5] in search_columns else state[1]}",
-                                "7":"Quit"}
-    
     
     #Main 
 
-    while True : 
-                
+    while True :        
         match Menu_printer(search_options, title="searche menu", shape="-", head_steps=len(max(search_options.values(), key=len))*2): 
             case 1 : # Sorting
                 
                 pass
             case 2 : # Para
                 while True :
+                    
                     match Menu_printer(search_parameter_options, title="parameters", shape="-", head_steps=len(max(search_parameter_options.values(), key=len))*2) :
                         case 1 : #Columns
                             
@@ -261,7 +253,7 @@ def search_book():
                         
                         case 2 : #Specific
                             while True :
-                                match Menu_printer(spo_specific, title="SPECIFIC PARAMETERS", shape="-", head_steps=len(max(spo_specific.values(), key=len))*2) :
+                                match Menu_printer(spo_specific, title="SPECIFIC PARAMETERS", shape="-", head_steps=len(max(spo_specific.values(), key=len))*4) :
                                     case 1 :
                                         spp_specific={  "1":f"ID      {state[0] if table_columns[1] == search_specific else state[1]}",
                                                         "2":f"Title   {state[0] if table_columns[2] == search_specific else state[1]}",
@@ -269,7 +261,8 @@ def search_book():
                                                         "4":f"Niche   {state[0] if table_columns[4] == search_specific else state[1]}",
                                                         "5":f"Year    {state[0] if table_columns[5] == search_specific else state[1]}",
                                                         "6":"Quit"}
-                                        gear = Menu_printer(spp_specific.values(), title="COLUMN", shape="-", head_steps=len(max(spp_specific.values(), key=len))*2)
+                                        
+                                        gear = Menu_printer(spp_specific, title="COLUMN", shape="-", head_steps=len(max(spp_specific.values(), key=len))*2)
                                         if gear == 6 : 
                                             call("clear")
                                             print("[DONE]")
@@ -280,24 +273,24 @@ def search_book():
                                     case 2 : 
                                         while True :
                                             spo_specific_value =   {"1":f"Exact {state[0] if exact_searching_value != -1 else state[1]}",
-                                                                    "2":f"Gap   {state[0] if gap_searching_value[0] == -1 and gap_searching_value[1] == -1 else state[1]}",
+                                                                    "2":f"Gap   {state[0] if gap_searching_value[0] != -1 and gap_searching_value[1] != -1 else state[1]}",
                                                                     "3":"Quit"}
                                             
                                             # INTEGERS
                                             if search_specific == table_columns[1] or search_specific == table_columns[5] :
-                                                match Menu_printer(spo_specific_value.values(), title="COLUMN", shape="-", head_steps=len(max(spo_specific_value.values(), key=len))*2):
+                                                match Menu_printer(spo_specific_value, title="COLUMN", shape="-", head_steps=len(max(spo_specific_value.values(), key=len))*2):
                                                     case 1 :
                                                         call("clear")
-                                                        try : exact_searching_value = int(input("New Exact Value = "))
-                                                        except : print("ONLY INTEGER"); zz(1)
+                                                        try : exact_searching_value = int(input("New Exact Value = "));break
+                                                        except : call("clear");print("ONLY INTEGER"); zz(1)
 
                                                     case 2 :
                                                         call("clear")
                                                         try : 
                                                             gap_searching_value[0] = int(input("First Gap Value = "))
                                                             gap_searching_value[1] = int(input("Second Gap Value = "))
-                                                            
-                                                        except : print("ONLY INTEGER"); zz(1)
+                                                            break
+                                                        except : call("clear");print("ONLY INTEGER"); zz(1)
                                                     
                                                     case 3 :
                                                         call("clear")
@@ -307,8 +300,8 @@ def search_book():
                                             
                                             #TEXT    
                                             else :
-                                                try : search_as = str(input("Approximate Letters : "))
-                                                except: print("[ONLY STRING VALUE]") 
+                                                try : search_as = str(input("Approximate Letters : "));break
+                                                except: call("clear");print("[ONLY STRING VALUE]");zz(1) 
                                             
                                     case 3 :
                                         call("clear")
@@ -316,7 +309,8 @@ def search_book():
                                         zz(0.1)
                                         break
 
-                        case 3 :pass
+                        case 3 : #Direction (Ordering)
+                            pass
                         case 4 :pass
                         case 5 :
                             call("clear")
